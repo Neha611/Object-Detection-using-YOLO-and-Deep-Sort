@@ -6,7 +6,6 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 from PIL import Image
 import clip
 import os
-from google.colab.patches import cv2_imshow
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 clip_model, preprocess = clip.load("ViT-B/32", device=device)
