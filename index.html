@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Person Tracking</title>
+</head>
+<body>
+  <h2>Input Image</h2>
+  <img src="/static/Traget Person.png" width="300" />
+
+  <h2>Input Video</h2>
+  <video width="500" controls>
+    <source src="/static/Task_Video.mp4" type="video/mp4" />
+  </video>
+
+  <br /><br />
+  <button id="runButton">Run</button>
+
+  <h2>Output Video</h2>
+  <a id="outputLink" href="#" download style="display: none;">Download Output Video</a>
+
+  <script>
+    async function runModel() {
+      const runButton = document.getElementById("runButton");
+      runButton.disabled = true;
+      runButton.textContent = "Processing...";
+
+      try {
+        const res = await fetch("/run");
+        const data = await res.json();
+
+        if (data.status === "success") {
+          const link = document.getElementById("outputLink");
+          link.href = data.output + "?t=" + new Date().getTime();
+          link.style.display = "inline-block";
+          link.textContent = "Download Output Video";
+        } else {
+          alert("Processing failed");
+        }
+      } catch (err) {
+        alert("Something went wrong: " + err.message);
+      }
+
+      runButton.disabled = false;
+      runButton.textContent = "Run";
+    }
+
+    // ✅ This line was missing — it connects the button to the function
+    document.getElementById("runButton").addEventListener("click", runModel);
+  </script>
+</body>
+</html>
